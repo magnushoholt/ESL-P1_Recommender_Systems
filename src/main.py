@@ -1,7 +1,8 @@
 from data_prep import load_cv_split, load_item, cleaning_data
 from base_recommender import BaseRecommender
+from collaborative import CollaborativeRecommender
 
-models = [] # Pass functions for Content and collaborative
+models = [CollaborativeRecommender("Collaborative")] # Pass functions for Content and collaborative
 
 
 if __name__ == "__main__":
