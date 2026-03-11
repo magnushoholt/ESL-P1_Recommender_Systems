@@ -4,6 +4,7 @@
 # Surprise is a Python SciKit that comes with various recommender algorithms 
 # and similarity metrics to make it easy to build and analyze recommenders.
 # pip install scikit-surprise (requires python 3.11 and VS build tools)
+# also need a downgraded version of numpuy: pip install numpy==1.24.3 (pain in the ass)
 
 # ---------------- Setup data ----------------
 
@@ -157,3 +158,13 @@ if __name__ == "__main__":
 # Matrix factorization can improve results, but reduce explainability.
 # by reducing to latent factor, it makes the recommendations less interpretable.
 # so we don't do that.
+
+
+
+# Output from running this file:
+#Predicted rating for user 196 on item 302: 3.289
+#Holdout RMSE: 1.082
+#Top recommendations for user 196 (item_id, predicted_rating):
+#  item 328: 5.000
+#  item 408: 5.000
+#  item 169: 5.000
