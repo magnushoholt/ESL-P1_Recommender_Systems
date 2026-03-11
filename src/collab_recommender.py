@@ -4,7 +4,12 @@
 # Surprise is a Python SciKit that comes with various recommender algorithms 
 # and similarity metrics to make it easy to build and analyze recommenders.
 # pip install scikit-surprise (requires python 3.11 and VS build tools)
-# also need a downgraded version of numpuy: pip install numpy==1.24.3 (pain in the ass)
+# also need a downgraded version of numpuy: pip install numpy==1.26.4 (pain in the ass)
+
+# Simplest to just make a new venv and install:
+#python -m pip install --upgrade pip setuptools wheel
+#python -m pip install "numpy==1.26.4" "scipy==1.11.4" "cython<3"
+#python -m pip install --no-build-isolation --no-cache-dir scikit-surprise
 
 # ---------------- Setup data ----------------
 
