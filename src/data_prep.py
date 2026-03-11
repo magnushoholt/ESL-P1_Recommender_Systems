@@ -1,6 +1,20 @@
 import pandas as pd
 
 
+def load_cv_split(split_number=1):
+    """Loads a specific 80/20 train/test split from the MovieLens 100K dataset. Used for cross-validation."""
+    base_file = f'data/u{split_number}.base'
+    test_file = f'data/u{split_number}.test'
+
+    train_df = pd.read_csv(base_file, sep='\t', header=None)
+    test_df = pd.read_csv(test_file, sep='\t', header=None)
+
+    train_df.columns = ["user_id", "item_id", "rating", "timestamp"]
+    test_df.columns = ["user_id", "item_id", "rating", "timestamp"]
+
+    return train_df, test_df
+
+
 def load_data():
    df = pd.read_csv('data/u.data', sep='\t', header=None)
    df.columns = ["user_id", "item_id", "rating", "timestamp"]
