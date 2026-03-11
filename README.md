@@ -8,3 +8,7 @@ GitHub for Explainable Statistical Learning Project 1: Recommender Systems
    venv\Scripts\activate  # On Windows
    source venv/bin/activate  # On macOS/Linux
    ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
