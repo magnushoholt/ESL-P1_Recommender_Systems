@@ -1,4 +1,3 @@
-# Author: Jontan Blajet
 # Collaborative filtering recommender system using user-based approach.
 
 # Surprise is a Python SciKit that comes with various recommender algorithms 
