@@ -33,7 +33,7 @@ if __name__ == "__main__":
             for rec in recs:
                 print(f"  {rec['title']} (predicted: {rec['score']:.2f})")
                 for c in rec['contributors']:
-                    print(f"    neighbor {c['neighbor_id']} sim={c['similarity']:.2f} rated {c['neighbor_rating']:.1f}")
+                    print(f"    neighbor {c['user_id']} sim={c['similarity']:.2f} rated {c['rating']:.1f}")
 
             # 3. Evaluate: compute RMSE on the test set and print it
             rmse = compute_rmse(model, test_clean)
