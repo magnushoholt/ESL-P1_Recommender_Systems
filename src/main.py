@@ -28,18 +28,18 @@ if __name__ == "__main__":
             # 2. Model fitting
             model.fit(train_clean, items_df)
 
-            score = model.predict_rating(user_id=196, item_id=302)
+            score = model.predict_rating(user_id=196, item_id=302) # Add also the correct rating
             movie_title = items_df.loc[items_df["movie_id"] == 302, "movie_title"].iloc[0]
-            print(f"Predicted rating for user 196, film: '{movie_title}' - {score:.0f}")
+            print(f"Predicted rating for user 196, film: '{movie_title}' - {score:.1f}")
             
             print(f"")
             n_recs = 3
             print(f"Top {n_recs} recommendations for user 196:")
             recs = model.recommend(user_id=196, top_n=n_recs)
             for rec in recs:
-                print(f"  {rec['title']} (predicted: {rec['score']:.0f})")
+                print(f"  {rec['title']} (predicted: {rec['score']:.1f})")
                 for c in rec['contributors']:
-                    print(f"    neighbor {c['user_id']} sim={c['similarity']:.2f} rated {c['rating']:.0f}")
+                    print(f"    neighbor {c['user_id']} sim={c['similarity']:.5f} rated {c['rating']:.1f}")
 
             # 3. Evaluate: compute RMSE on the test set and print it
             rmse = compute_rmse(model, test_clean)
