@@ -1,9 +1,28 @@
 from data_prep import load_cv_split, load_item, cleaning_data
 from base_recommender import BaseRecommender
 from collaborative import CollaborativeRecommender
-from eval import compute_rmse
+from eval import compute_rmse, compute_single_rmse
 
 models = [CollaborativeRecommender("Collaborative", k=3)] # Pass functions for Content and collaborative
+
+
+def find_true_rating(ratings_df, user_id, item_id):
+    """Return the known rating for one (user, item) pair if it exists."""
+    match = ratings_df[
+        (ratings_df["user_id"] == user_id) &
+        (ratings_df["item_id"] == item_id)
+    ]
+    if match.empty:
+        return None
+    return float(match.iloc[0]["rating"])
+
+
+def movie_title_from_id(items_df, item_id):
+    """Resolve movie title from item_id, with a safe fallback label."""
+    title_match = items_df[items_df["movie_id"] == item_id]["movie_title"]
+    if title_match.empty:
+        return f"Item {item_id}"
+    return title_match.iloc[0]
 
 
 if __name__ == "__main__":
@@ -20,29 +39,28 @@ if __name__ == "__main__":
         _, test_clean = cleaning_data(items_df, test_raw)
 
         for model in models:
-            print(f"Training {model.name}...") # What model we are training
-            
-            # 1. Feed into models
-            # Jon: I don't know what we should put here.
-            
-            # 2. Model fitting
+            print(f"Training {model.name}...")
+
+            # 1. Fit the model to the training data
             model.fit(train_clean, items_df)
 
-            score = model.predict_rating(user_id=196, item_id=302) # Add also the correct rating
-            movie_title = items_df.loc[items_df["movie_id"] == 302, "movie_title"].iloc[0]
-            print(f"Predicted rating for user 196, film: '{movie_title}' - {score:.1f}")
-            
-            print(f"")
-            n_recs = 3
-            print(f"Top {n_recs} recommendations for user 196:")
-            recs = model.recommend(user_id=196, top_n=n_recs)
-            for rec in recs:
-                print(f"  {rec['title']} (predicted: {rec['score']:.1f})")
-                for c in rec['contributors']:
-                    print(f"    neighbor {c['user_id']} sim={c['similarity']:.5f} rated {c['rating']:.1f}")
+            # 2. Predict the rating for a specific (user, item) pair and display it
+            item_id = 11
+            user_id = 1
+            movie_title = movie_title_from_id(items_df, item_id=item_id)
+            true_rating = find_true_rating(train_clean, user_id=user_id, item_id=item_id)
+            score = model.predict_rating(user_id=user_id, item_id=item_id, display=True)
+            if true_rating is None:
+                print(f"True rating for user {user_id} on '{movie_title}' in this fold: not available")
+            else:
+                print(f"True rating for user {user_id} on '{movie_title}' in this fold: {true_rating:.1f}")
+                sample_rmse = compute_single_rmse(score, true_rating)
+                print(f"Single-sample RMSE: {sample_rmse:.4f}")
 
-            # 3. Evaluate: compute RMSE on the test set and print it
+            # 3. Generate and display top-N recommendations for the user
+            n_recs = 3
+            model.recommend(user_id=user_id, top_n=n_recs, display=True)
+
+            # 4. Compute and display the RMSE for the model on the test set
             rmse = compute_rmse(model, test_clean)
             print(f"{model.name} RMSE: {rmse:.4f}")
-            
-            pass

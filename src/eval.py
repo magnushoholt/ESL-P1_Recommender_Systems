@@ -1,6 +1,16 @@
 import numpy as np
 
 
+def compute_single_rmse(predicted, actual):
+    """Compute RMSE for one prediction-target pair.
+
+    Returns None if either value is missing.
+    """
+    if predicted is None or actual is None:
+        return None
+    return float(np.sqrt((predicted - actual) ** 2))
+
+
 def compute_rmse(model, test_data):
     """Compute Root Mean Squared Error (RMSE) for a fitted model on test data.
 

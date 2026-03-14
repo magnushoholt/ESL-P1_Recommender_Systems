@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from base_recommender import BaseRecommender
+from data_prep import matrix_data
 
 
 class CollaborativeRecommender(BaseRecommender):
@@ -66,14 +67,47 @@ class CollaborativeRecommender(BaseRecommender):
             self.user_item_matrix, self.user_means
         )
 
-    def predict_rating(self, user_id, item_id):
+    def predict_rating(self, user_id, item_id, display=False):
         """Return the predicted rating (1-5) that user_id would give item_id.
 
         Returns None if the user or item is not in the training data.
         """
-        return self._predict_single(user_id, item_id)
+        score = self._predict_single(user_id, item_id)
+        if display:
+            self.display_prediction(
+                user_id=user_id,
+                item_id=item_id,
+                predicted_score=score,
+            )
+        return score
 
-    def recommend(self, user_id, top_n=5):
+    def display_prediction(self, user_id, item_id, predicted_score):
+        """Print one prediction for a user-item pair."""
+        title = self._movie_title(item_id)
+
+        if predicted_score is None:
+            print(f"Predicted rating for user {user_id}, film: '{title}' - unavailable")
+        else:
+            print(f"Predicted rating for user {user_id}, film: '{title}' - {predicted_score:.1f}")
+
+    def display_recommendations(self, user_id, recommendations, top_n):
+        """Print top-N recommendation output with neighbor details."""
+        print("")
+        print(f"Top {top_n} recommendations for user {user_id}:")
+        if not recommendations:
+            print("  No recommendations available.")
+            return
+
+        for rec in recommendations:
+            print(f"  {rec['title']} (predicted: {rec['score']:.1f})")
+            for c in rec["contributors"]:
+                print(
+                    f"    neighbor {c['user_id']} "
+                    f"sim={c['similarity']:.5f} "
+                    f"rated {c['rating']:.1f}"
+                )
+
+    def recommend(self, user_id, top_n=5, display=False):
         """Return the top_n unseen movies for user_id, each with an explanation.
 
         Each result is a dict:
@@ -110,8 +144,7 @@ class CollaborativeRecommender(BaseRecommender):
                 continue
 
             # Look up the movie title; fall back to the numeric id if missing
-            title_match = self.items_df[self.items_df["movie_id"] == item_id]["movie_title"]
-            title = title_match.values[0] if len(title_match) > 0 else f"Item {item_id}"
+            title = self._movie_title(item_id)
 
             # Collect the neighbors that influenced this prediction the most
             explanation = self._explain_prediction(user_id, item_id)
@@ -125,7 +158,12 @@ class CollaborativeRecommender(BaseRecommender):
 
         # Sort highest predicted rating first and return the top N
         scored.sort(key=lambda x: x["score"], reverse=True)
-        return scored[:top_n]
+        out = scored[:top_n]
+
+        if display:
+            self.display_recommendations(user_id=user_id, recommendations=out, top_n=top_n)
+
+        return out
 
     # ------------------------------------------------------------------ #
     #  Private helpers — each does exactly one thing                      #
@@ -137,11 +175,13 @@ class CollaborativeRecommender(BaseRecommender):
         Rows are user IDs, columns are movie IDs, values are ratings (1–5).
         Movies a user has not rated are stored as NaN.
         """
-        # .pivot() reshapes a long table (one row per rating) into a wide matrix.
-        # index="user_id"   → each unique user becomes a row
-        # columns="item_id" → each unique movie becomes a column
-        # values="rating"   → the cell value is the rating; NaN where the user hasn't rated
-        return ratings_df.pivot(index="user_id", columns="item_id", values="rating")
+        
+        return matrix_data(ratings_df)
+
+    def _movie_title(self, item_id):
+        """Resolve a movie title from item_id, with a fallback label."""
+        title_match = self.items_df[self.items_df["movie_id"] == item_id]["movie_title"]
+        return title_match.values[0] if len(title_match) > 0 else f"Item {item_id}"
 
     def _compute_user_means(self, matrix):
         """Compute each user's average rating across all movies they have rated.
