@@ -20,8 +20,7 @@ def load_data():
    df.columns = ["user_id", "item_id", "rating", "timestamp"]
    return df
 
-def matrix_data():
-    df = load_data()
+def matrix_data(df):
     matrix_df = df.pivot(index='user_id', columns='item_id', values='rating')
     return matrix_df
 
@@ -92,5 +91,4 @@ if __name__ == "__main__":
     print(item_clean.head())
     info_df = load_info()
     print(info_df.head())
-    matrix_df = matrix_data()
-    print(matrix_df.head())
+    print(matrix_data(ratings_clean).shape)
