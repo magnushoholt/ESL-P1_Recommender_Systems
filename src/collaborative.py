@@ -5,21 +5,25 @@ from data_prep import matrix_data
 
 
 class CollaborativeRecommender(BaseRecommender):
-    """User-based collaborative filtering recommender with explainable predictions.
+    """Collaborative filtering recommender with explainable predictions.
 
     How it works:
-      1. fit()           — build a user x item rating matrix and precompute user similarities.
+      1. fit()           — build a user x item rating matrix and precompute similarities.
       2. predict_rating()— estimate what rating a user would give an unseen movie.
       3. recommend()     — return the top-N unseen movies with an explanation for each.
 
-    The prediction formula (KNNWithMeans) is:
+    The prediction formula (KNNWithMeans-style) is:
         predicted = user_mean + Σ(sim * (neighbor_rating - neighbor_mean)) / Σ(sim)
 
-    Mean-centering removes the bias of users who habitually rate high or low.
+    This class supports both:
+      - user-user collaborative filtering (user_based=True)
+      - item-item collaborative filtering (user_based=False)
+
+    Mean-centering removes bias from users/items that always rate high or low.
     """
 
-    def __init__(self, name, k=3):
-        """Store the model name and the number of nearest neighbors k.
+    def __init__(self, name, k=3, user_based=True, similarity="cosine"):
+        """Store model configuration.
 
         Parameters
         ----------
@@ -28,18 +32,20 @@ class CollaborativeRecommender(BaseRecommender):
             Useful when comparing multiple models side by side.
         k : int, optional (default=3)
             How many similar users to consult when predicting a rating.
-            A higher k uses more neighbors (smoother but less personal).
-            A lower k relies on fewer, very similar users (more personal but noisier).
-
-            You can set this from main.py when creating the model:
-                CollaborativeRecommender("Collaborative")       → k=3 (default)
-                CollaborativeRecommender("Collaborative", 5)    → k=5
+        user_based : bool, optional (default=True)
+            True  -> user-user collaborative filtering.
+            False -> item-item collaborative filtering.
+        similarity : str, optional (default="cosine")
+            Similarity metric. Supported: "cosine", "pearson".
         """
         super().__init__(name)
-        self.k = k                     # how many similar users to consult per prediction
-        self.user_item_matrix = None   # DataFrame: rows=users, cols=items, values=ratings (NaN if unseen)
-        self.user_means = None         # Series: average rating per user
-        self.similarity_matrix = None  # DataFrame: cosine similarity between every pair of users
+        self.k = k
+        self.user_based = user_based
+        self.similarity = similarity
+        self.user_item_matrix = None   # rows=users, cols=items, values=ratings (NaN if unseen)
+        self.user_means = None         # average rating per user
+        self.item_means = None         # average rating per item
+        self.similarity_matrix = None  # user-user or item-item similarity matrix
         self.items_df = None           # DataFrame with movie_id and movie_title columns
 
     # ------------------------------------------------------------------ #
@@ -59,13 +65,13 @@ class CollaborativeRecommender(BaseRecommender):
         # Build the user×item matrix (one row per user, one column per movie)
         self.user_item_matrix = self._build_user_item_matrix(train_data)
 
-        # Compute each user's average rating so we can mean-center later
+        # Compute means used in KNNWithMeans-style prediction.
+        # We keep both so user-based and item-based modes can share code paths.
         self.user_means = self._compute_user_means(self.user_item_matrix)
+        self.item_means = self.user_item_matrix.mean(axis=0)
 
-        # Precompute cosine similarity between every pair of users
-        self.similarity_matrix = self._compute_similarity_matrix(
-            self.user_item_matrix, self.user_means
-        )
+        # Precompute either user-user or item-item similarity matrix.
+        self.similarity_matrix = self._compute_similarity_matrix(self.user_item_matrix)
 
     def predict_rating(self, user_id, item_id, display=False):
         """Return the predicted rating (1-5) that user_id would give item_id.
@@ -92,7 +98,6 @@ class CollaborativeRecommender(BaseRecommender):
 
     def display_recommendations(self, user_id, recommendations, top_n):
         """Print top-N recommendation output with neighbor details."""
-        print("")
         print(f"Top {top_n} recommendations for user {user_id}:")
         if not recommendations:
             print("  No recommendations available.")
@@ -100,11 +105,13 @@ class CollaborativeRecommender(BaseRecommender):
 
         for rec in recommendations:
             print(f"  {rec['title']} (predicted: {rec['score']:.1f})")
+            source_label = "user" if self.user_based else "item"
             for c in rec["contributors"]:
                 print(
-                    f"    neighbor {c['user_id']} "
+                    f"    neighbor {source_label} {c['source_id']} "
                     f"sim={c['similarity']:.5f} "
-                    f"rated {c['rating']:.1f}"
+                    f"rated {c['rating']:.1f} "
+                    f"contrib={c['contribution']:+.3f}"
                 )
 
     def recommend(self, user_id, top_n=5, display=False):
@@ -193,81 +200,87 @@ class CollaborativeRecommender(BaseRecommender):
         # NaN cells (unseen movies) are automatically ignored by pandas .mean().
         return matrix.mean(axis=1)
 
-    def _compute_similarity_matrix(self, matrix, user_means):
-        """Compute pairwise cosine similarity between all users using mean-centered ratings.
+    def _compute_similarity_matrix(self, matrix):
+        """Compute user-user or item-item similarities from centered rating vectors.
 
-        Mean-centering: subtract each user's average so a user who always rates 5
-        looks the same as one who always rates 3 — only relative preferences matter.
-        Means they are now centered around 0.
+        High-level:
+          - user-based mode compares users (rows)
+          - item-based mode compares items (columns)
 
-        Filling NaN with 0 after centering is equivalent to ignoring unrated items
-        in the dot product, which is the standard approach for sparse rating data.
+        Low-level:
+          - center vectors by user/item mean
+          - fill NaN with 0 for sparse operations
+          - compute pairwise similarity by selected metric
         """
-        # .subtract(user_means, axis=0) subtracts each user's own average from
-        # every rating in that user's row. axis=0 tells pandas to match by row label.
-        centered = matrix.subtract(user_means, axis=0)
+        if self.user_based:
+            centered = matrix.subtract(self.user_means, axis=0)
+            vectors = centered.fillna(0).to_numpy()  # shape: (n_users, n_items)
+            labels = matrix.index.tolist()
+        else:
+            centered = matrix.subtract(self.item_means, axis=1)
+            vectors = centered.fillna(0).to_numpy().T  # shape: (n_items, n_users)
+            labels = matrix.columns.tolist()
 
-        # Replace NaN (unseen movies) with 0 so they don't affect dot products
-        filled = centered.fillna(0).to_numpy()  # shape: (n_users, n_items)
+        sim = self._pairwise_similarity(vectors)
+        return pd.DataFrame(sim, index=labels, columns=labels)
 
-        # Dot product of all user-vector pairs at once (fast matrix multiplication)
-        dot_products = filled @ filled.T          # shape: (n_users, n_users)
+    def _pairwise_similarity(self, vectors):
+        """Compute pairwise similarity for a matrix of entity vectors.
 
-        # Compute the length (norm) of each user's rating vector
-        norms = np.linalg.norm(filled, axis=1)   # shape: (n_users,)
+        vectors shape: (n_entities, n_features)
+        """
+        if self.similarity == "cosine":
+            dot_products = vectors @ vectors.T
+            norms = np.linalg.norm(vectors, axis=1)
+            with np.errstate(invalid="ignore"):
+                sim = dot_products / np.outer(norms, norms)
+            return np.nan_to_num(sim)
 
-        # Divide each dot product by the product of the two norms
-        # np.errstate suppresses the divide-by-zero warning for users with no ratings
-        with np.errstate(invalid="ignore"):
-            sim = dot_products / np.outer(norms, norms)
+        if self.similarity == "pearson":
+            # Pearson across entities (rows). NaN appears for constant vectors, so map to 0.
+            return np.nan_to_num(np.corrcoef(vectors))
 
-        # Replace any NaN that resulted from 0/0 division with 0
-        sim = np.nan_to_num(sim)
-
-        # Wrap the result back in a DataFrame so we can look up by user_id
-        users = matrix.index.tolist()
-        return pd.DataFrame(sim, index=users, columns=users)
+        raise ValueError(f"Unsupported similarity: {self.similarity}")
 
     def _get_k_neighbors(self, user_id, item_id):
-        """Find the k most similar users to user_id who have rated item_id.
+        """Return top-k neighbors for the current collaborative mode.
 
-        Returns a list of (neighbor_id, their_rating, similarity) tuples,
-        ordered by similarity (highest first), capped at k entries.
-        Only users with positive similarity are included (negative = opposite taste).
+        user-based:
+          neighbors are similar users who rated target item.
+        item-based:
+          neighbors are similar items already rated by target user.
         """
-        # Guard: unknown user — .index holds all row labels (user IDs)
-        if user_id not in self.user_item_matrix.index:
+        if user_id not in self.user_item_matrix.index or item_id not in self.user_item_matrix.columns:
             return []
-        # Guard: unknown item — .columns holds all column labels (movie IDs)
-        if item_id not in self.user_item_matrix.columns:
-            return []
-
-        # Fetch the column for this movie: a Series where index=user_id, value=their rating.
-        # Users who haven't rated it have NaN here.
-        item_ratings = self.user_item_matrix[item_id]
-
-        # Fetch this user's column from the similarity matrix.
-        # The similarity matrix has users as both rows and columns, so this gives
-        # a Series: how similar every other user is to our target user.
-        user_sims = self.similarity_matrix[user_id]
 
         neighbors = []
-        for neighbor_id, rating in item_ratings.items():
-            if neighbor_id == user_id:
-                continue              # skip the target user themselves
-            if pd.isna(rating):
-                continue              # skip users who haven't rated this movie
-            sim = user_sims[neighbor_id]
-            if sim <= 0:
-                continue              # skip users with no positive similarity
-            neighbors.append((neighbor_id, rating, float(sim)))
 
-        # Keep only the k most similar neighbors
+        if self.user_based:
+            item_ratings = self.user_item_matrix[item_id]
+            user_sims = self.similarity_matrix[user_id]
+            for neighbor_user_id, rating in item_ratings.items():
+                if neighbor_user_id == user_id or pd.isna(rating):
+                    continue
+                sim = user_sims[neighbor_user_id]
+                if sim <= 0:
+                    continue
+                neighbors.append((neighbor_user_id, rating, float(sim)))
+        else:
+            user_ratings = self.user_item_matrix.loc[user_id]
+            item_sims = self.similarity_matrix[item_id]
+            for neighbor_item_id, rating in user_ratings.items():
+                if neighbor_item_id == item_id or pd.isna(rating):
+                    continue
+                sim = item_sims[neighbor_item_id]
+                if sim <= 0:
+                    continue
+                neighbors.append((neighbor_item_id, rating, float(sim)))
+
         neighbors.sort(key=lambda x: x[2], reverse=True)
         return neighbors[: self.k]
 
     def _predict_single(self, user_id, item_id):
-        """Predict the rating user_id would give item_id using KNNWithMeans.
+        """Predict one rating using user-user or item-item KNNWithMeans-style logic.
 
         Formula:
             prediction = user_mean + Σ(sim * (r_neighbor - mean_neighbor)) / Σ(sim)
@@ -283,22 +296,26 @@ class CollaborativeRecommender(BaseRecommender):
 
         neighbors = self._get_k_neighbors(user_id, item_id)
 
-        # No neighbors found → use the user's plain average as a fallback
+        if self.user_based:
+            baseline = self.user_means[user_id]
+        else:
+            baseline = self.item_means[item_id]
+
+        # No neighbors found -> fall back to baseline mean.
         if not neighbors:
-            return float(self.user_means[user_id])
+            return float(baseline)
 
-        user_mean = self.user_means[user_id]
-
-        numerator = 0.0    # weighted sum of neighbor deviations from their own mean
-        denominator = 0.0  # sum of similarities (used to normalise)
+        numerator = 0.0
+        denominator = 0.0
 
         for neighbor_id, neighbor_rating, sim in neighbors:
-            neighbor_mean = self.user_means[neighbor_id]
-            # How much did this neighbor deviate from their average? Weight by similarity.
+            # In user-based mode, neighbor mean is a user mean.
+            # In item-based mode, neighbor mean is an item mean.
+            neighbor_mean = self.user_means[neighbor_id] if self.user_based else self.item_means[neighbor_id]
             numerator += sim * (neighbor_rating - neighbor_mean)
             denominator += abs(sim)
 
-        predicted = user_mean + (numerator / denominator)
+        predicted = baseline + (numerator / denominator)
 
         # Clamp to the valid rating range [1, 5] — the formula can overshoot
         return float(np.clip(predicted, 1.0, 5.0))
@@ -318,11 +335,12 @@ class CollaborativeRecommender(BaseRecommender):
 
         contributors = []
         for neighbor_id, neighbor_rating, sim in neighbors:
-            neighbor_mean = self.user_means[neighbor_id]
+            neighbor_mean = self.user_means[neighbor_id] if self.user_based else self.item_means[neighbor_id]
             # Contribution: how much this neighbor shifted the final predicted rating
             contribution = sim * (neighbor_rating - neighbor_mean)
             contributors.append({
-                "user_id": neighbor_id,
+                # Generic source_id works for both user-neighbors and item-neighbors.
+                "source_id": neighbor_id,
                 "similarity": round(sim, 3),
                 "rating": neighbor_rating,
                 "contribution": round(float(contribution), 3),

@@ -3,7 +3,12 @@ from base_recommender import BaseRecommender
 from collaborative import CollaborativeRecommender
 from eval import compute_rmse, compute_single_rmse
 
-models = [CollaborativeRecommender("Collaborative", k=3)] # Pass functions for Content and collaborative
+# Compare multiple collaborative variants with minimal extra plumbing.
+models = [
+    CollaborativeRecommender("User-User Cosine", k=3, user_based=True, similarity="cosine"),
+    CollaborativeRecommender("Item-Item Cosine", k=3, user_based=False, similarity="cosine"),
+    CollaborativeRecommender("User-User Pearson", k=3, user_based=True, similarity="pearson"),
+]
 
 
 def find_true_rating(ratings_df, user_id, item_id):
@@ -39,6 +44,7 @@ if __name__ == "__main__":
         _, test_clean = cleaning_data(items_df, test_raw)
 
         for model in models:
+            print(f"")
             print(f"Training {model.name}...")
 
             # 1. Fit the model to the training data
