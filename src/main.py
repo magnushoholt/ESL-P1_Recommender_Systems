@@ -3,11 +3,15 @@ from base_recommender import BaseRecommender
 from collaborative import CollaborativeRecommender
 from eval import compute_rmse, compute_single_rmse
 
-# Compare multiple collaborative variants with minimal extra plumbing.
+# Compare multiple collaborative variants.
+# Varying k tests sensitivity to neighbourhood size.
+# Varying user_based and similarity tests different algorithmic approaches.
 models = [
-    CollaborativeRecommender("User-User Cosine", k=3, user_based=True, similarity="cosine"),
-    CollaborativeRecommender("Item-Item Cosine", k=3, user_based=False, similarity="cosine"),
-    CollaborativeRecommender("User-User Pearson", k=3, user_based=True, similarity="pearson"),
+    CollaborativeRecommender("User-User Cosine k=3",  k=3,  user_based=True,  similarity="cosine"),
+    CollaborativeRecommender("User-User Cosine k=10", k=10, user_based=True,  similarity="cosine"),
+    CollaborativeRecommender("User-User Cosine k=25", k=25, user_based=True,  similarity="cosine"),
+    CollaborativeRecommender("Item-Item Cosine k=3",  k=3,  user_based=False, similarity="cosine"),
+    CollaborativeRecommender("User-User Pearson k=3", k=3,  user_based=True,  similarity="pearson"),
 ]
 
 
