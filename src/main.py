@@ -1,17 +1,21 @@
 from data_prep import load_cv_split, load_item, cleaning_data
 from base_recommender import BaseRecommender
 from collaborative import CollaborativeRecommender
+from content import Content_recommender_system
 from eval import compute_rmse, compute_single_rmse
 
-# Compare multiple collaborative variants.
-# Varying k tests sensitivity to neighbourhood size.
-# Varying user_based and similarity tests different algorithmic approaches.
+# Compare multiple recommender variants:
+# Collaborative: user-user and item-item with different k and similarity metrics.
+# Content-based: genre-based with optional rating weighting.
 models = [
     CollaborativeRecommender("User-User Cosine k=3",  k=3,  user_based=True,  similarity="cosine"),
     CollaborativeRecommender("User-User Cosine k=10", k=10, user_based=True,  similarity="cosine"),
     CollaborativeRecommender("User-User Cosine k=25", k=25, user_based=True,  similarity="cosine"),
     CollaborativeRecommender("Item-Item Cosine k=3",  k=3,  user_based=False, similarity="cosine"),
     CollaborativeRecommender("User-User Euclidean k=3", k=3,  user_based=True,  similarity="euclidean"),
+    Content_recommender_system("Content (Genres Only)"),
+    Content_recommender_system("Content (Genres + Rating bias=0)"),
+    Content_recommender_system("Content (Genres + Rating bias=10)"),
 ]
 
 
@@ -52,7 +56,14 @@ if __name__ == "__main__":
             print(f"Training {model.name}...")
 
             # 1. Fit the model to the training data
-            model.fit(train_clean, items_df)
+            if isinstance(model, Content_recommender_system):
+                # Content models use include_rating and rating_bias parameters
+                include_rating = "Rating" in model.name
+                rating_bias = 10 if "bias=10" in model.name else (0 if "bias=0" in model.name else 0)
+                model.fit(train_clean, items_df, include_rating=include_rating, rating_bias=rating_bias)
+            else:
+                # Collaborative models
+                model.fit(train_clean, items_df)
 
             # 2. Predict the rating for a specific (user, item) pair and display it
             item_id = 11
