@@ -1,0 +1,576 @@
+py src/main.py
+
+===============================
+--- Fold 1 ---
+
+Training User-User Cosine k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 3.7
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.6718
+Top 3 recommendations for user 1:
+  Wallace & Gromit: The Best of Aardman Animation (1996) (predicted: 5.0)
+    neighbor user 868 sim=0.13900 rated 5.0 contrib=+0.285
+    neighbor user 727 sim=0.13900 rated 5.0 contrib=+0.274
+    neighbor user 429 sim=0.15200 rated 5.0 contrib=+0.248
+  Citizen Kane (1941) (predicted: 5.0)
+    neighbor user 650 sim=0.14100 rated 5.0 contrib=+0.261
+    neighbor user 429 sim=0.15200 rated 5.0 contrib=+0.248
+    neighbor user 592 sim=0.14100 rated 5.0 contrib=+0.166
+  Cinema Paradiso (1988) (predicted: 5.0)
+    neighbor user 773 sim=0.15400 rated 5.0 contrib=+0.266
+    neighbor user 429 sim=0.15200 rated 5.0 contrib=+0.248
+    neighbor user 592 sim=0.14100 rated 5.0 contrib=+0.166
+User-User Cosine k=3 RMSE: 1.0231
+
+Training User-User Cosine k=10...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 4.1
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 2.1051
+Top 3 recommendations for user 1:
+  Usual Suspects, The (1995) (predicted: 5.0)
+    neighbor user 868 sim=0.13900 rated 5.0 contrib=+0.285
+    neighbor user 880 sim=0.17500 rated 5.0 contrib=+0.277
+    neighbor user 727 sim=0.13900 rated 5.0 contrib=+0.274
+  Two or Three Things I Know About Her (1966) (predicted: 5.0)
+    neighbor user 13 sim=0.09700 rated 5.0 contrib=+0.181
+    neighbor user 76 sim=0.03000 rated 4.0 contrib=+0.018
+  Mina Tannenbaum (1994) (predicted: 5.0)
+    neighbor user 655 sim=0.08600 rated 5.0 contrib=+0.180
+    neighbor user 936 sim=0.04700 rated 5.0 contrib=+0.059
+    neighbor user 858 sim=0.04500 rated 4.0 contrib=+0.026
+User-User Cosine k=10 RMSE: 0.9585
+
+Training User-User Cosine k=25...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 4.0
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.9524
+Top 3 recommendations for user 1:
+  Two or Three Things I Know About Her (1966) (predicted: 5.0)
+    neighbor user 13 sim=0.09700 rated 5.0 contrib=+0.181
+    neighbor user 76 sim=0.03000 rated 4.0 contrib=+0.018
+  Mina Tannenbaum (1994) (predicted: 5.0)
+    neighbor user 655 sim=0.08600 rated 5.0 contrib=+0.180
+    neighbor user 936 sim=0.04700 rated 5.0 contrib=+0.059
+    neighbor user 858 sim=0.04500 rated 4.0 contrib=+0.026
+  Saint of Fort Washington, The (1993) (predicted: 5.0)
+    neighbor user 886 sim=0.13700 rated 5.0 contrib=+0.225
+    neighbor user 244 sim=0.04900 rated 5.0 contrib=+0.064
+User-User Cosine k=25 RMSE: 0.9471
+
+Training Item-Item Cosine k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 3.6
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.6221
+Top 3 recommendations for user 1:
+  Raiders of the Lost Ark (1981) (predicted: 5.0)
+    neighbor item 181 sim=0.26800 rated 5.0 contrib=+0.265
+    neighbor item 172 sim=0.32700 rated 5.0 contrib=+0.263
+    neighbor item 50 sim=0.27400 rated 5.0 contrib=+0.176
+  Mrs. Brown (Her Majesty, Mrs. Brown) (1997) (predicted: 5.0)
+    neighbor item 146 sim=0.13100 rated 4.0 contrib=+0.147
+    neighbor item 246 sim=0.10200 rated 5.0 contrib=+0.123
+    neighbor item 106 sim=0.10100 rated 4.0 contrib=+0.110
+  Duck Soup (1933) (predicted: 5.0)
+    neighbor item 1 sim=0.13700 rated 5.0 contrib=+0.152
+    neighbor item 204 sim=0.12600 rated 5.0 contrib=+0.150
+    neighbor item 168 sim=0.14900 rated 5.0 contrib=+0.140
+Item-Item Cosine k=3 RMSE: 0.9989
+
+Training User-User Euclidean k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 3.9
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.8985
+Top 3 recommendations for user 1:
+  Saint of Fort Washington, The (1993) (predicted: 5.0)
+    neighbor user 886 sim=0.04500 rated 5.0 contrib=+0.074
+    neighbor user 244 sim=0.05200 rated 5.0 contrib=+0.068
+  Someone Else's America (1995) (predicted: 5.0)
+    neighbor user 437 sim=0.04200 rated 5.0 contrib=+0.059
+  Some Mother's Son (1996) (predicted: 5.0)
+    neighbor user 707 sim=0.04500 rated 5.0 contrib=+0.068
+    neighbor user 655 sim=0.04200 rated 4.0 contrib=+0.046
+User-User Euclidean k=3 RMSE: 1.0670
+
+Training Content (Genres Only)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.3
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.7388
+Top 3 recommendations for user 1:
+  1. Get Shorty (1995) (score: 0.8243)
+  2. Faster Pussycat! Kill! Kill! (1965) (score: 0.8243)
+  3. House of Yes, The (1997) (score: 0.8142)
+Content (Genres Only) RMSE: 3.2627
+
+Training Content (Genres + Rating bias=0)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.5
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.5491
+Top 3 recommendations for user 1:
+  1. As Good As It Gets (1997) (score: 0.8632)
+  2. Eat Drink Man Woman (1994) (score: 0.8620)
+  3. Cool Hand Luke (1967) (score: 0.8606)
+Content (Genres + Rating bias=0) RMSE: 3.1477
+
+Training Content (Genres + Rating bias=10)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.5
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.5339
+Top 3 recommendations for user 1:
+  1. As Good As It Gets (1997) (score: 0.8656)
+  2. Cool Hand Luke (1967) (score: 0.8646)
+  3. Eat Drink Man Woman (1994) (score: 0.8621)
+Content (Genres + Rating bias=10) RMSE: 3.1468
+
+===============================
+--- Fold 2 ---
+
+Training User-User Cosine k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 3.1
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.1199
+Top 3 recommendations for user 1:
+  2001: A Space Odyssey (1968) (predicted: 5.0)
+    neighbor user 868 sim=0.18600 rated 5.0 contrib=+0.381
+    neighbor user 566 sim=0.23300 rated 5.0 contrib=+0.375
+    neighbor user 660 sim=0.16300 rated 4.0 contrib=+0.231
+  L.A. Confidential (1997) (predicted: 5.0)
+    neighbor user 363 sim=0.18600 rated 5.0 contrib=+0.348
+    neighbor user 880 sim=0.16300 rated 5.0 contrib=+0.257
+    neighbor user 592 sim=0.16200 rated 5.0 contrib=+0.188
+  Close Shave, A (1995) (predicted: 5.0)
+    neighbor user 868 sim=0.18600 rated 5.0 contrib=+0.381
+    neighbor user 773 sim=0.20900 rated 5.0 contrib=+0.360
+    neighbor user 363 sim=0.18600 rated 5.0 contrib=+0.348
+User-User Cosine k=3 RMSE: 1.0199
+
+Training User-User Cosine k=10...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 4.0
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.9537
+Top 3 recommendations for user 1:
+  Great Day in Harlem, A (1994) (predicted: 5.0)
+    neighbor user 13 sim=0.14800 rated 5.0 contrib=+0.288
+  Hearts and Minds (1996) (predicted: 5.0)
+    neighbor user 13 sim=0.14800 rated 5.0 contrib=+0.288
+    neighbor user 331 sim=0.04800 rated 4.0 contrib=+0.019
+  Faust (1994) (predicted: 5.0)
+    neighbor user 773 sim=0.20900 rated 5.0 contrib=+0.360
+    neighbor user 385 sim=0.02200 rated 5.0 contrib=+0.038
+    neighbor user 581 sim=0.02200 rated 5.0 contrib=+0.021
+User-User Cosine k=10 RMSE: 0.9508
+
+Training User-User Cosine k=25...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 3.8
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.8401
+Top 3 recommendations for user 1:
+  Great Day in Harlem, A (1994) (predicted: 5.0)
+    neighbor user 13 sim=0.14800 rated 5.0 contrib=+0.288
+  Hearts and Minds (1996) (predicted: 5.0)
+    neighbor user 13 sim=0.14800 rated 5.0 contrib=+0.288
+    neighbor user 331 sim=0.04800 rated 4.0 contrib=+0.019
+  Faust (1994) (predicted: 5.0)
+    neighbor user 773 sim=0.20900 rated 5.0 contrib=+0.360
+    neighbor user 385 sim=0.02200 rated 5.0 contrib=+0.038
+    neighbor user 581 sim=0.02200 rated 5.0 contrib=+0.021
+User-User Cosine k=25 RMSE: 0.9384
+
+Training Item-Item Cosine k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 2.5
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 0.4672
+Top 3 recommendations for user 1:
+  Maya Lin: A Strong Clear Vision (1994) (predicted: 5.0)
+    neighbor item 207 sim=0.23200 rated 5.0 contrib=+0.279
+    neighbor item 12 sim=0.25600 rated 5.0 contrib=+0.155
+    neighbor item 76 sim=0.22100 rated 4.0 contrib=+0.120
+  Mr. Smith Goes to Washington (1939) (predicted: 5.0)
+    neighbor item 81 sim=0.17500 rated 5.0 contrib=+0.247
+    neighbor item 60 sim=0.17800 rated 5.0 contrib=+0.170
+    neighbor item 178 sim=0.25700 rated 5.0 contrib=+0.160
+  Close Shave, A (1995) (predicted: 5.0)
+    neighbor item 16 sim=0.21700 rated 5.0 contrib=+0.375
+    neighbor item 236 sim=0.24000 rated 4.0 contrib=+0.064
+    neighbor item 251 sim=0.22200 rated 4.0 contrib=-0.021
+Item-Item Cosine k=3 RMSE: 0.9891
+
+Training User-User Euclidean k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 3.7
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.6857
+Top 3 recommendations for user 1:
+  Great Day in Harlem, A (1994) (predicted: 5.0)
+    neighbor user 13 sim=0.02900 rated 5.0 contrib=+0.056
+  Saint of Fort Washington, The (1993) (predicted: 5.0)
+    neighbor user 886 sim=0.04100 rated 5.0 contrib=+0.067
+    neighbor user 244 sim=0.04300 rated 5.0 contrib=+0.060
+  Santa with Muscles (1996) (predicted: 5.0)
+    neighbor user 781 sim=0.04800 rated 5.0 contrib=+0.059
+    neighbor user 279 sim=0.03500 rated 5.0 contrib=+0.059
+User-User Euclidean k=3 RMSE: 1.0594
+
+Training Content (Genres Only)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.3
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.7069
+Top 3 recommendations for user 1:
+  1. Get Shorty (1995) (score: 0.8333)
+  2. Faster Pussycat! Kill! Kill! (1965) (score: 0.8333)
+  3. Best Men (1997) (score: 0.7884)
+Content (Genres Only) RMSE: 3.2588
+
+Training Content (Genres + Rating bias=0)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.5
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.5312
+Top 3 recommendations for user 1:
+  1. Get Shorty (1995) (score: 0.8549)
+  2. Faster Pussycat! Kill! Kill! (1965) (score: 0.8462)
+  3. As Good As It Gets (1997) (score: 0.8277)
+Content (Genres + Rating bias=0) RMSE: 3.1438
+
+Training Content (Genres + Rating bias=10)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.5
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.5185
+Top 3 recommendations for user 1:
+  1. Get Shorty (1995) (score: 0.8614)
+  2. As Good As It Gets (1997) (score: 0.8295)
+  3. Cool Hand Luke (1967) (score: 0.8287)
+Content (Genres + Rating bias=10) RMSE: 3.1436
+
+===============================
+--- Fold 3 ---
+
+Training User-User Cosine k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 4.2
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: not available
+Top 3 recommendations for user 1:
+  Star Wars (1977) (predicted: 5.0)
+    neighbor user 868 sim=0.19400 rated 5.0 contrib=+0.390
+    neighbor user 916 sim=0.17400 rated 5.0 contrib=+0.286
+    neighbor user 880 sim=0.17000 rated 5.0 contrib=+0.269
+  Wrong Trousers, The (1993) (predicted: 5.0)
+    neighbor user 868 sim=0.19400 rated 5.0 contrib=+0.390
+    neighbor user 92 sim=0.15200 rated 5.0 contrib=+0.267
+    neighbor user 738 sim=0.15500 rated 5.0 contrib=+0.217
+  12 Angry Men (1957) (predicted: 5.0)
+    neighbor user 868 sim=0.19400 rated 5.0 contrib=+0.390
+    neighbor user 886 sim=0.16900 rated 5.0 contrib=+0.276
+    neighbor user 487 sim=0.15800 rated 5.0 contrib=+0.230
+User-User Cosine k=3 RMSE: 1.0189
+
+Training User-User Cosine k=10...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 4.0
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: not available
+Top 3 recommendations for user 1:
+  Star Wars (1977) (predicted: 5.0)
+    neighbor user 868 sim=0.19400 rated 5.0 contrib=+0.390
+    neighbor user 916 sim=0.17400 rated 5.0 contrib=+0.286
+    neighbor user 886 sim=0.16900 rated 5.0 contrib=+0.276
+  Wrong Trousers, The (1993) (predicted: 5.0)
+    neighbor user 868 sim=0.19400 rated 5.0 contrib=+0.390
+    neighbor user 268 sim=0.14100 rated 5.0 contrib=+0.292
+    neighbor user 92 sim=0.15200 rated 5.0 contrib=+0.267
+  Great Day in Harlem, A (1994) (predicted: 5.0)
+    neighbor user 13 sim=0.15300 rated 5.0 contrib=+0.290
+User-User Cosine k=10 RMSE: 0.9473
+
+Training User-User Cosine k=25...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 4.2
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: not available
+Top 3 recommendations for user 1:
+  Star Wars (1977) (predicted: 5.0)
+    neighbor user 868 sim=0.19400 rated 5.0 contrib=+0.390
+    neighbor user 268 sim=0.14100 rated 5.0 contrib=+0.292
+    neighbor user 916 sim=0.17400 rated 5.0 contrib=+0.286
+  Great Day in Harlem, A (1994) (predicted: 5.0)
+    neighbor user 13 sim=0.15300 rated 5.0 contrib=+0.290
+  Delta of Venus (1994) (predicted: 5.0)
+    neighbor user 167 sim=0.02200 rated 5.0 contrib=+0.040
+User-User Cosine k=25 RMSE: 0.9339
+
+Training Item-Item Cosine k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 4.1
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: not available
+Top 3 recommendations for user 1:
+  Star Wars (1977) (predicted: 5.0)
+    neighbor item 181 sim=0.37000 rated 5.0 contrib=+0.353
+    neighbor item 172 sim=0.37500 rated 5.0 contrib=+0.270
+    neighbor item 174 sim=0.37300 rated 5.0 contrib=+0.265
+  Monty Python and the Holy Grail (1974) (predicted: 5.0)
+    neighbor item 154 sim=0.24900 rated 5.0 contrib=+0.315
+    neighbor item 75 sim=0.21400 rated 4.0 contrib=+0.267
+    neighbor item 58 sim=0.17600 rated 4.0 contrib=+0.062
+  Secrets & Lies (1996) (predicted: 5.0)
+    neighbor item 13 sim=0.13000 rated 5.0 contrib=+0.196
+    neighbor item 124 sim=0.13800 rated 5.0 contrib=+0.120
+    neighbor item 107 sim=0.17400 rated 4.0 contrib=+0.076
+Item-Item Cosine k=3 RMSE: 0.9892
+
+Training User-User Euclidean k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 4.2
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: not available
+Top 3 recommendations for user 1:
+  Great Day in Harlem, A (1994) (predicted: 5.0)
+    neighbor user 13 sim=0.02800 rated 5.0 contrib=+0.052
+  Saint of Fort Washington, The (1993) (predicted: 5.0)
+    neighbor user 886 sim=0.04100 rated 5.0 contrib=+0.067
+    neighbor user 244 sim=0.04200 rated 5.0 contrib=+0.056
+  Santa with Muscles (1996) (predicted: 5.0)
+    neighbor user 781 sim=0.04700 rated 5.0 contrib=+0.059
+    neighbor user 279 sim=0.03300 rated 5.0 contrib=+0.058
+User-User Euclidean k=3 RMSE: 1.0463
+
+Training Content (Genres Only)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.3
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: not available
+Top 3 recommendations for user 1:
+  1. Faster Pussycat! Kill! Kill! (1965) (score: 0.8238)
+  2. Get Shorty (1995) (score: 0.8238)
+  3. Best Men (1997) (score: 0.7714)
+Content (Genres Only) RMSE: 3.2303
+
+Training Content (Genres + Rating bias=0)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.4
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: not available
+Top 3 recommendations for user 1:
+  1. Get Shorty (1995) (score: 0.8492)
+  2. Faster Pussycat! Kill! Kill! (1965) (score: 0.8325)
+  3. Cinema Paradiso (1988) (score: 0.8050)
+Content (Genres + Rating bias=0) RMSE: 3.1174
+
+Training Content (Genres + Rating bias=10)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.5
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: not available
+Top 3 recommendations for user 1:
+  1. Get Shorty (1995) (score: 0.8555)
+  2. Cinema Paradiso (1988) (score: 0.8089)
+  3. As Good As It Gets (1997) (score: 0.8070)
+Content (Genres + Rating bias=10) RMSE: 3.1157
+
+===============================
+--- Fold 4 ---
+
+Training User-User Cosine k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 3.9
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.8918
+Top 3 recommendations for user 1:
+  Cold Comfort Farm (1995) (predicted: 5.0)
+    neighbor user 13 sim=0.15600 rated 5.0 contrib=+0.297
+    neighbor user 303 sim=0.16200 rated 5.0 contrib=+0.262
+    neighbor user 363 sim=0.16200 rated 4.0 contrib=+0.158
+  Secrets & Lies (1996) (predicted: 5.0)
+    neighbor user 13 sim=0.15600 rated 5.0 contrib=+0.297
+    neighbor user 344 sim=0.15700 rated 5.0 contrib=+0.214
+    neighbor user 449 sim=0.14900 rated 5.0 contrib=+0.183
+  Schindler's List (1993) (predicted: 5.0)
+    neighbor user 479 sim=0.19100 rated 5.0 contrib=+0.310
+    neighbor user 276 sim=0.17800 rated 5.0 contrib=+0.272
+    neighbor user 429 sim=0.17400 rated 5.0 contrib=+0.270
+User-User Cosine k=3 RMSE: 1.0170
+
+Training User-User Cosine k=10...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 3.9
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.9446
+Top 3 recommendations for user 1:
+  Great Day in Harlem, A (1994) (predicted: 5.0)
+    neighbor user 13 sim=0.15600 rated 5.0 contrib=+0.297
+  Boys, Les (1997) (predicted: 5.0)
+    neighbor user 234 sim=0.05800 rated 5.0 contrib=+0.109
+  Saint of Fort Washington, The (1993) (predicted: 5.0)
+    neighbor user 886 sim=0.11900 rated 5.0 contrib=+0.180
+User-User Cosine k=10 RMSE: 0.9473
+
+Training User-User Cosine k=25...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 3.9
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.8732
+Top 3 recommendations for user 1:
+  Great Day in Harlem, A (1994) (predicted: 5.0)
+    neighbor user 13 sim=0.15600 rated 5.0 contrib=+0.297
+  Boys, Les (1997) (predicted: 5.0)
+    neighbor user 234 sim=0.05800 rated 5.0 contrib=+0.109
+  Saint of Fort Washington, The (1993) (predicted: 5.0)
+    neighbor user 886 sim=0.11900 rated 5.0 contrib=+0.180
+User-User Cosine k=25 RMSE: 0.9322
+
+Training Item-Item Cosine k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 3.7
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.7069
+Top 3 recommendations for user 1:
+  Jean de Florette (1986) (predicted: 5.0)
+    neighbor item 166 sim=0.40500 rated 5.0 contrib=+0.367
+    neighbor item 207 sim=0.20600 rated 5.0 contrib=+0.232
+    neighbor item 113 sim=0.14700 rated 5.0 contrib=+0.129
+  Sense and Sensibility (1995) (predicted: 5.0)
+    neighbor item 1 sim=0.13800 rated 5.0 contrib=+0.153
+    neighbor item 137 sim=0.13300 rated 5.0 contrib=+0.149
+    neighbor item 9 sim=0.12800 rated 5.0 contrib=+0.134
+  Close Shave, A (1995) (predicted: 5.0)
+    neighbor item 221 sim=0.25200 rated 5.0 contrib=+0.318
+    neighbor item 169 sim=0.28400 rated 5.0 contrib=+0.148
+    neighbor item 256 sim=0.29600 rated 4.0 contrib=+0.137
+Item-Item Cosine k=3 RMSE: 0.9880
+
+Training User-User Euclidean k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 3.7
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.6505
+Top 3 recommendations for user 1:
+  Great Day in Harlem, A (1994) (predicted: 5.0)
+    neighbor user 13 sim=0.02700 rated 5.0 contrib=+0.051
+  Saint of Fort Washington, The (1993) (predicted: 5.0)
+    neighbor user 886 sim=0.04200 rated 5.0 contrib=+0.064
+  Tough and Deadly (1995) (predicted: 5.0)
+    neighbor user 279 sim=0.03200 rated 5.0 contrib=+0.056
+User-User Euclidean k=3 RMSE: 1.0565
+
+Training Content (Genres Only)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.3
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.7164
+Top 3 recommendations for user 1:
+  1. Get Shorty (1995) (score: 0.8265)
+  2. Faster Pussycat! Kill! Kill! (1965) (score: 0.8265)
+  3. Best Men (1997) (score: 0.7795)
+Content (Genres Only) RMSE: 3.2336
+
+Training Content (Genres + Rating bias=0)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.5
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.5422
+Top 3 recommendations for user 1:
+  1. Get Shorty (1995) (score: 0.8524)
+  2. Faster Pussycat! Kill! Kill! (1965) (score: 0.8385)
+  3. Best Men (1997) (score: 0.8207)
+Content (Genres + Rating bias=0) RMSE: 3.1205
+
+Training Content (Genres + Rating bias=10)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.5
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.5272
+Top 3 recommendations for user 1:
+  1. Get Shorty (1995) (score: 0.8590)
+  2. As Good As It Gets (1997) (score: 0.8101)
+  3. Cool Hand Luke (1967) (score: 0.8089)
+Content (Genres + Rating bias=10) RMSE: 3.1185
+
+===============================
+--- Fold 5 ---
+
+Training User-User Cosine k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 4.5
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 2.4872
+Top 3 recommendations for user 1:
+  Schindler's List (1993) (predicted: 5.0)
+    neighbor user 429 sim=0.18900 rated 5.0 contrib=+0.304
+    neighbor user 276 sim=0.18800 rated 5.0 contrib=+0.291
+    neighbor user 592 sim=0.19200 rated 5.0 contrib=+0.221
+  Boogie Nights (1997) (predicted: 5.0)
+    neighbor user 429 sim=0.18900 rated 5.0 contrib=+0.304
+    neighbor user 276 sim=0.18800 rated 5.0 contrib=+0.291
+    neighbor user 592 sim=0.19200 rated 5.0 contrib=+0.221
+  Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb (1963) (predicted: 5.0)
+    neighbor user 268 sim=0.16000 rated 5.0 contrib=+0.326
+    neighbor user 276 sim=0.18800 rated 5.0 contrib=+0.291
+    neighbor user 457 sim=0.18700 rated 5.0 contrib=+0.183
+User-User Cosine k=3 RMSE: 1.0194
+
+Training User-User Cosine k=10...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 4.0
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 2.0470
+Top 3 recommendations for user 1:
+  Great Day in Harlem, A (1994) (predicted: 5.0)
+    neighbor user 13 sim=0.14900 rated 5.0 contrib=+0.282
+  Two or Three Things I Know About Her (1966) (predicted: 5.0)
+    neighbor user 13 sim=0.14900 rated 5.0 contrib=+0.282
+    neighbor user 405 sim=0.01700 rated 1.0 contrib=-0.014
+    neighbor user 385 sim=0.00700 rated 5.0 contrib=+0.012
+  Boys, Les (1997) (predicted: 5.0)
+    neighbor user 234 sim=0.08500 rated 5.0 contrib=+0.159
+    neighbor user 845 sim=0.01100 rated 1.0 contrib=-0.024
+User-User Cosine k=10 RMSE: 0.9485
+
+Training User-User Cosine k=25...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 3.9
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.9357
+Top 3 recommendations for user 1:
+  Great Day in Harlem, A (1994) (predicted: 5.0)
+    neighbor user 13 sim=0.14900 rated 5.0 contrib=+0.282
+  Two or Three Things I Know About Her (1966) (predicted: 5.0)
+    neighbor user 13 sim=0.14900 rated 5.0 contrib=+0.282
+    neighbor user 405 sim=0.01700 rated 1.0 contrib=-0.014
+    neighbor user 385 sim=0.00700 rated 5.0 contrib=+0.012
+  Boys, Les (1997) (predicted: 5.0)
+    neighbor user 234 sim=0.08500 rated 5.0 contrib=+0.159
+    neighbor user 845 sim=0.01100 rated 1.0 contrib=-0.024
+User-User Cosine k=25 RMSE: 0.9338
+
+Training Item-Item Cosine k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 3.5
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.4509
+Top 3 recommendations for user 1:
+  Schindler's List (1993) (predicted: 5.0)
+    neighbor item 191 sim=0.23500 rated 5.0 contrib=+0.211
+    neighbor item 64 sim=0.19700 rated 5.0 contrib=+0.108
+    neighbor item 133 sim=0.18500 rated 4.0 contrib=+0.017
+  Harold and Maude (1971) (predicted: 5.0)
+    neighbor item 44 sim=0.18000 rated 5.0 contrib=+0.300
+    neighbor item 177 sim=0.19500 rated 5.0 contrib=+0.217
+    neighbor item 197 sim=0.18400 rated 5.0 contrib=+0.160
+  Paths of Glory (1957) (predicted: 5.0)
+    neighbor item 60 sim=0.27100 rated 5.0 contrib=+0.266
+    neighbor item 32 sim=0.13000 rated 5.0 contrib=+0.158
+    neighbor item 61 sim=0.25000 rated 4.0 contrib=+0.042
+Item-Item Cosine k=3 RMSE: 0.9913
+
+Training User-User Euclidean k=3...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 3.2
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.2082
+Top 3 recommendations for user 1:
+  Great Day in Harlem, A (1994) (predicted: 5.0)
+    neighbor user 13 sim=0.02600 rated 5.0 contrib=+0.050
+  Delta of Venus (1994) (predicted: 5.0)
+    neighbor user 167 sim=0.04200 rated 5.0 contrib=+0.070
+  Santa with Muscles (1996) (predicted: 5.0)
+    neighbor user 279 sim=0.03300 rated 5.0 contrib=+0.056
+User-User Euclidean k=3 RMSE: 1.0494
+
+Training Content (Genres Only)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.3
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.7027
+Top 3 recommendations for user 1:
+  1. Get Shorty (1995) (score: 0.8228)
+  2. Faster Pussycat! Kill! Kill! (1965) (score: 0.8228)
+  3. Best Men (1997) (score: 0.7799)
+Content (Genres Only) RMSE: 3.2384
+
+Training Content (Genres + Rating bias=0)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.5
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.5288
+Top 3 recommendations for user 1:
+  1. Get Shorty (1995) (score: 0.8476)
+  2. Faster Pussycat! Kill! Kill! (1965) (score: 0.8296)
+  3. As Good As It Gets (1997) (score: 0.8112)
+Content (Genres + Rating bias=0) RMSE: 3.1249
+
+Training Content (Genres + Rating bias=10)...
+Predicted rating for user 1, film: 'Seven (Se7en) (1995)' - 0.5
+True rating for user 1 on 'Seven (Se7en) (1995)' in this fold: 2.0
+Single-sample RMSE: 1.5147
+Top 3 recommendations for user 1:
+  1. Get Shorty (1995) (score: 0.8545)
+  2. As Good As It Gets (1997) (score: 0.8135)
+  3. Cool Hand Luke (1967) (score: 0.8126)
+Content (Genres + Rating bias=10) RMSE: 3.1235
