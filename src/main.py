@@ -11,7 +11,7 @@ models = [
     CollaborativeRecommender("User-User Cosine k=10", k=10, user_based=True,  similarity="cosine"),
     CollaborativeRecommender("User-User Cosine k=25", k=25, user_based=True,  similarity="cosine"),
     CollaborativeRecommender("Item-Item Cosine k=3",  k=3,  user_based=False, similarity="cosine"),
-    CollaborativeRecommender("User-User Pearson k=3", k=3,  user_based=True,  similarity="pearson"),
+    CollaborativeRecommender("User-User Euclidean k=3", k=3,  user_based=True,  similarity="euclidean"),
 ]
 
 

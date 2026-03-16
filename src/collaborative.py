@@ -36,7 +36,7 @@ class CollaborativeRecommender(BaseRecommender):
             True  -> user-user collaborative filtering.
             False -> item-item collaborative filtering.
         similarity : str, optional (default="cosine")
-            Similarity metric. Supported: "cosine", "pearson".
+            Similarity metric. Supported: "cosine", "euclidean".
         """
         super().__init__(name)
         self.k = k
@@ -236,9 +236,11 @@ class CollaborativeRecommender(BaseRecommender):
                 sim = dot_products / np.outer(norms, norms)
             return np.nan_to_num(sim)
 
-        if self.similarity == "pearson":
-            # Pearson across entities (rows). NaN appears for constant vectors, so map to 0.
-            return np.nan_to_num(np.corrcoef(vectors))
+        if self.similarity == "euclidean":
+            # Euclidean distance converted to similarity: sim = 1/(1+distance).
+            # Magnitude-sensitive metric (vs cosine which is angle-based).
+            distances = np.linalg.norm(vectors[:, np.newaxis, :] - vectors[np.newaxis, :, :], axis=2)
+            return 1.0 / (1.0 + distances)
 
         raise ValueError(f"Unsupported similarity: {self.similarity}")
 
