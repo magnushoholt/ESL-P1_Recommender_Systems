@@ -38,6 +38,58 @@ def movie_title_from_id(items_df, item_id):
     return title_match.iloc[0]
 
 
+def display_prediction_result(user_id, item_id, movie_title, predicted_score, true_rating):
+    """Display prediction result with true rating comparison and RMSE if available."""
+    if predicted_score is None:
+        print(f"Predicted rating for user {user_id}, film: '{movie_title}' - unavailable")
+    else:
+        print(f"Predicted rating for user {user_id}, film: '{movie_title}' - {predicted_score:.1f}")
+
+    if true_rating is None:
+        print(f"True rating for user {user_id} on '{movie_title}' in this fold: not available")
+    else:
+        print(f"True rating for user {user_id} on '{movie_title}' in this fold: {true_rating:.1f}")
+        sample_rmse = compute_single_rmse(predicted_score, true_rating)
+        print(f"Single-sample RMSE: {sample_rmse:.4f}")
+
+
+def _to_scalar_score(value):
+    """Convert scalar-or-list score values into a printable float."""
+    # Content recommender stores cosine output as list-like values, e.g. [0.73].
+    while isinstance(value, (list, tuple)) and len(value) > 0:
+        value = value[0]
+    return float(value)
+
+
+def display_recommendations(model, user_id, top_n, items_df):
+    """Display top-N recommendations, handling both collaborative and content models."""
+    if isinstance(model, CollaborativeRecommender):
+        # Ask collaborative model for structured data and display from main.
+        recs = model.recommend(user_id=user_id, top_n=top_n, display=False)
+        print(f"Top {top_n} recommendations for user {user_id}:")
+        if not recs:
+            print("  No recommendations available.")
+            return
+
+        for rec in recs:
+            print(f"  {rec['title']} (predicted: {rec['score']:.1f})")
+            source_label = "user" if model.user_based else "item"
+            for c in rec["contributors"]:
+                print(
+                    f"    neighbor {source_label} {c['source_id']} "
+                    f"sim={c['similarity']:.5f} "
+                    f"rated {c['rating']:.1f} "
+                    f"contrib={c['contribution']:+.3f}"
+                )
+    else:
+        # Content model returns dataframe; format it ourselves
+        recs_df = model.recommend(user_id=user_id, top_n=top_n)
+        print(f"Top {top_n} recommendations for user {user_id}:")
+        for idx, (movie_id, row) in enumerate(recs_df.iterrows(), 1):
+            score = _to_scalar_score(row["Score"])
+            title = movie_title_from_id(items_df, movie_id)
+            print(f"  {idx}. {title} (score: {score:.4f})")
+
 if __name__ == "__main__":
     items_df = load_item()
         
@@ -70,17 +122,13 @@ if __name__ == "__main__":
             user_id = 1
             movie_title = movie_title_from_id(items_df, item_id=item_id)
             true_rating = find_true_rating(train_clean, user_id=user_id, item_id=item_id)
-            score = model.predict_rating(user_id=user_id, item_id=item_id, display=True)
-            if true_rating is None:
-                print(f"True rating for user {user_id} on '{movie_title}' in this fold: not available")
-            else:
-                print(f"True rating for user {user_id} on '{movie_title}' in this fold: {true_rating:.1f}")
-                sample_rmse = compute_single_rmse(score, true_rating)
-                print(f"Single-sample RMSE: {sample_rmse:.4f}")
+            score = model.predict_rating(user_id=user_id, item_id=item_id)
+            score = None if score is None else _to_scalar_score(score)
+            display_prediction_result(user_id, item_id, movie_title, score, true_rating)
 
             # 3. Generate and display top-N recommendations for the user
             n_recs = 3
-            model.recommend(user_id=user_id, top_n=n_recs, display=True)
+            display_recommendations(model, user_id, n_recs, items_df)
 
             # 4. Compute and display the RMSE for the model on the test set
             rmse = compute_rmse(model, test_clean)

@@ -72,10 +72,10 @@ class Content_recommender_system(BaseRecommender):
     def predict_rating(self, user_id, item_id):
         user_chosen = self.user_genre.loc[[user_id]]
         item_chosen = self.features.loc[[item_id]]
-        print("User")
-        print(user_chosen.head())
-        print("Item")
-        print(item_chosen.head())
+        #print("User")
+        #print(user_chosen.head())
+        #print("Item")
+        #print(item_chosen.head())
         out = cosine_similarity(user_chosen,item_chosen)[0][0]
         return out
     
