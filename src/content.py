@@ -77,7 +77,7 @@ class Content_recommender_system(BaseRecommender):
         #print("Item")
         #print(item_chosen.head())
         out = cosine_similarity(user_chosen,item_chosen)[0][0]
-        return out
+        return out*4+1
     
     def recommend(self, user_id, top_n=5):
         user_chosen = self.user_genre.loc[[user_id]]
