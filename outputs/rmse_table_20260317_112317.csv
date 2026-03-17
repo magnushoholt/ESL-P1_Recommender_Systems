@@ -1,0 +1,10 @@
+Recommender,Fold 1,Fold 2,Fold 3,Fold 4,Fold 5
+Content (Genres + Rating bias=0),,,,,
+Content (Genres + Rating bias=1),,,,,
+Content (Genres + Rating bias=5),,,,,
+Content (Genres Only),,,,,
+Item-Item Cosine k=3,,,,,
+User-User Cosine k=10,,,,,
+User-User Cosine k=25,,,,,
+User-User Cosine k=3,,,,,
+User-User Euclidean k=3,,,,,

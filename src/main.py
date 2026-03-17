@@ -15,7 +15,8 @@ models = [
     CollaborativeRecommender("User-User Euclidean k=3", k=3,  user_based=True,  similarity="euclidean"),
     Content_recommender_system("Content (Genres Only)"),
     Content_recommender_system("Content (Genres + Rating bias=0)"),
-    Content_recommender_system("Content (Genres + Rating bias=10)"),
+    Content_recommender_system("Content (Genres + Rating bias=1)"),
+    Content_recommender_system("Content (Genres + Rating bias=5)"),
 ]
 
 
@@ -111,7 +112,7 @@ if __name__ == "__main__":
             if isinstance(model, Content_recommender_system):
                 # Content models use include_rating and rating_bias parameters
                 include_rating = "Rating" in model.name
-                rating_bias = 10 if "bias=10" in model.name else (0 if "bias=0" in model.name else 0)
+                rating_bias = 5 if "bias=5" in model.name else (1 if "bias=1" in model.name else 0)
                 model.fit(train_clean, items_df, include_rating=include_rating, rating_bias=rating_bias)
             else:
                 # Collaborative models

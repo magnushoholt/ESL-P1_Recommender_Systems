@@ -46,7 +46,7 @@ def compute_rmse_table(folds):
     result = pd.DataFrame.from_dict(rmse_by_model, orient="index")
     ordered_columns = [f"fold_{fold}" for fold in folds]
     result = result.reindex(columns=ordered_columns)
-    result.index.name = "recommender"
+    result.index.name = "Recommender"
     return result.sort_index()
 
 

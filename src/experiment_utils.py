@@ -1,5 +1,6 @@
 from datetime import datetime
 from pathlib import Path
+import re
 
 from collaborative import CollaborativeRecommender
 from content import Content_recommender_system
@@ -64,7 +65,8 @@ def fit_model(model, train_data, items_df):
     """Fit one model using the same conventions as the main comparison script."""
     if isinstance(model, Content_recommender_system):
         include_rating = "Rating" in model.name
-        rating_bias = 10 if "bias=10" in model.name else 0
+        bias_match = re.search(r"bias=(\d+)", model.name)
+        rating_bias = int(bias_match.group(1)) if bias_match else 0
         model.fit(train_data, items_df, include_rating=include_rating, rating_bias=rating_bias)
     else:
         model.fit(train_data, items_df)
@@ -81,5 +83,6 @@ def create_model_suite():
         CollaborativeRecommender("User-User Euclidean k=3", k=3, user_based=True, similarity="euclidean"),
         Content_recommender_system("Content (Genres Only)"),
         Content_recommender_system("Content (Genres + Rating bias=0)"),
-        Content_recommender_system("Content (Genres + Rating bias=10)"),
+        Content_recommender_system("Content (Genres + Rating bias=1)"),
+        Content_recommender_system("Content (Genres + Rating bias=5)"),
     ]

@@ -46,7 +46,7 @@ def parse_args():
     parser.add_argument(
         "--content-rating-bias",
         type=int,
-        default=10,
+        default=5,
         help="Bias term used when computing the optional rating feature.",
     )
     parser.add_argument(

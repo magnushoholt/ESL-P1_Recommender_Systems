@@ -23,7 +23,7 @@ python src/plot_user_test_predictions.py --user-id 1 --fold 1
 Optional arguments let you choose the collaborative configuration and content-model rating bias:
 
 ```bash
-python src/plot_user_test_predictions.py --user-id 1 --fold 3 --collab-k 25 --collab-similarity cosine --content-include-rating --content-rating-bias 10
+python src/plot_user_test_predictions.py --user-id 1 --fold 3 --collab-k 25 --collab-similarity cosine --content-include-rating --content-rating-bias 5
 ```
 
 ## Export an RMSE table for all recommenders
@@ -38,3 +38,16 @@ You can also restrict the evaluated folds:
 ```bash
 python src/export_rmse_table.py --folds 1 2 3
 ```
+
+
+Commands for boxplot output:
+
+python src/plot_model_error_boxplots.py            # All 5 folds
+python src/plot_model_error_boxplots.py --folds 1 2 3  # Subset
+python src/plot_model_error_boxplots.py --output-dir custom/path
+
+The shared recommender suite used by RMSE and boxplot scripts includes:
+- Content (Genres Only)
+- Content (Genres + Rating bias=0)
+- Content (Genres + Rating bias=1)
+- Content (Genres + Rating bias=5)

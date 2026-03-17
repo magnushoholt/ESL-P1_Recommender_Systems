@@ -1,0 +1,11 @@
+                                  Fold 1  Fold 2  Fold 3  Fold 4  Fold 5
+Recommender                                                             
+Content (Genres + Rating bias=0)     NaN     NaN     NaN     NaN     NaN
+Content (Genres + Rating bias=1)     NaN     NaN     NaN     NaN     NaN
+Content (Genres + Rating bias=5)     NaN     NaN     NaN     NaN     NaN
+Content (Genres Only)                NaN     NaN     NaN     NaN     NaN
+Item-Item Cosine k=3                 NaN     NaN     NaN     NaN     NaN
+User-User Cosine k=10                NaN     NaN     NaN     NaN     NaN
+User-User Cosine k=25                NaN     NaN     NaN     NaN     NaN
+User-User Cosine k=3                 NaN     NaN     NaN     NaN     NaN
+User-User Euclidean k=3              NaN     NaN     NaN     NaN     NaN
