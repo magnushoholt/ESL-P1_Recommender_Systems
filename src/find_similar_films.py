@@ -17,6 +17,7 @@ import random
 import difflib
 import sys
 import time
+import argparse
 
 import pandas as pd
 
@@ -41,12 +42,16 @@ from content import Content_recommender_system
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
+_FAST_MODE = False  # set by parse_args()
+
 WELCOME = (
     "\n"
-    "╔═════════════════════════════════════════╗\n"
-    "║   Made with help from:                  ║\n"
-    "║   Qwopus3.6-27B Coder-MTP Recommender   ║\n"
-    "╚═════════════════════════════════════════╝\n"
+    "╔═════════════════════════════╗\n"
+    "║   Recommender Systems       ║\n"
+    "║                             ║\n"  
+    "║   Made with help from:      ║\n"
+    "║   Qwopus3.6-27B Coder-MTP   ║\n"
+    "╚═════════════════════════════╝\n"
 )
 
 RANDOM_SAMPLE_COUNT = 3
@@ -58,8 +63,25 @@ PAUSE_SECONDS = 1
 # Helpers
 # ---------------------------------------------------------------------------
 
+def parse_args():
+    """Parse command-line arguments."""
+    parser = argparse.ArgumentParser(
+        description="Interactive film-recommendation script using the MovieLens 100K dataset."
+    )
+    parser.add_argument(
+        "-fast",
+        action="store_true",
+        default=False,
+        help="Skip all pause delays for faster execution.",
+    )
+    return parser.parse_args()
+
+
 def pause(seconds=PAUSE_SECONDS):
-    """Pause execution for *seconds* and print a brief indicator."""
+    """Pause execution for *seconds* and print a brief indicator.
+    Skipped entirely when _FAST_MODE is True."""
+    if _FAST_MODE:
+        return
     #print(f"   ⏸  Pausing for {seconds} second(s)…")
     time.sleep(seconds)
 
@@ -80,7 +102,7 @@ def show_random_movies(items_df, count=RANDOM_SAMPLE_COUNT):
     with vertically aligned genre columns."""
     sample = items_df.sample(n=min(count, len(items_df)), random_state=random.randint(0, 10000))
     print(f"\n🎬 Here are {count} random films from the MovieLens catalog for inspiration:\n")
-
+    pause()
     # Find the longest title in this sample so we can pad uniformly
     max_title_len = max(len(row["movie_title"]) for _, row in sample.iterrows())
 
@@ -106,7 +128,7 @@ def pick_user_id(ratings_df):
         raw = input("Enter a user ID to roleplay as (or press Enter for a random user): ").strip()
         if raw == "":
             uid = random.choice(valid_ids)
-            print(f"   → Randomly selected user {uid}.\n")
+            print(f"   → Randomly selected user {uid}.")
             return uid
         try:
             uid = int(raw)
@@ -116,8 +138,25 @@ def pick_user_id(ratings_df):
         if uid not in valid_ids:
             print(f"   ⚠  User {uid} not found. Valid range: {min(valid_ids)}–{max(valid_ids)}.")
             continue
-        print(f"   → You are now user {uid}.\n")
+        print(f"   → You are now user {uid}.")
         return uid
+
+
+def show_user_top_films(ratings_df, items_df, user_id, top_n=3):
+    """Print the top *top_n* films for *user_id* by rating, with their scores."""
+    user_ratings = ratings_df[ratings_df["user_id"] == user_id]
+    top = user_ratings.nlargest(top_n, "rating")
+    print(f"\n🏆 Top {top_n} films for user {user_id}:")
+    # Resolve titles first so we can compute max length
+    titles = []
+    for _, row in top.iterrows():
+        title_row = items_df[items_df["movie_id"] == row["item_id"]]
+        title = title_row["movie_title"].iloc[0] if not title_row.empty else f"Unknown (ID {row['item_id']})"
+        titles.append((title, row["rating"]))
+    max_title_len = max(len(t) for t, _ in titles)
+    for title, rating in titles:
+        print(f"   ★ {title:<{max_title_len}}  (rating: {rating:.1f} / 5)")
+        pause()
 
 
 def fuzzy_match_title(query, items_df, top_n=FUZZY_TOP_N):
@@ -216,28 +255,41 @@ def display_content_recs(model, user_id, items_df, top_n):
 # Main
 # ---------------------------------------------------------------------------
 
+
+
+
 def main():
+    global _FAST_MODE
+    args = parse_args()
+    _FAST_MODE = args.fast
+
     print(WELCOME)
+    pause(2)
 
     # --- Load data --------------------------------------------------------
     print("Loading MovieLens 100K dataset …")
+    pause()
     raw_ratings = load_data()
     raw_items = load_item()
     items_clean, ratings_clean = cleaning_data(raw_items, raw_ratings)
-    print(f"   {len(items_clean)} movies, {len(ratings_clean)} ratings loaded.\n")
+    print(f"   {len(items_clean)} movies, {len(ratings_clean)} ratings loaded.")
     pause()
 
     # --- Show random samples -----------------------------------------------
     show_random_movies(items_clean)
-    pause(2)
+    pause()
 
     # --- Pick a user -------------------------------------------------------
     user_id = pick_user_id(ratings_clean)
-    pause(1)
+    pause()
+
+    # --- Show user's top films ---------------------------------------------
+    show_user_top_films(ratings_clean, items_clean, user_id, top_n=3)
+    pause()
 
     # --- Resolve a movie title ---------------------------------------------
     movie_id, movie_title = resolve_movie_title(items_clean)
-    pause(1)
+    pause()
 
     # --- Train models ------------------------------------------------------
     print(f"\n🔧 Training recommender models for user {user_id} …")
@@ -300,7 +352,7 @@ def main():
         else:
             print(f"   {label:<{max_label_len}} → unavailable")
         pause()
-    pause(3)
+    pause(1)
 
     # --- Recommendations ---------------------------------------------------
     print(f"\n{'='*55}")
@@ -310,24 +362,25 @@ def main():
 
     print(f"\n  📊 User-User Collaborative (k=10, cosine):")
     display_collab_recs(collab_model, user_id, TOP_N_RECS)
-    pause(2)
+    pause(1)
 
     print(f"\n  📊 Item-Item Collaborative (k=10, cosine):")
     display_collab_recs(collab_item, user_id, TOP_N_RECS)
-    pause(2)
+    pause(1)
 
     print(f"\n  📊 Content-Based (Genres Only):")
     display_content_recs(content_model, user_id, items_clean, TOP_N_RECS)
-    pause(2)
+    pause(1)
 
     print(f"\n  📊 Content-Based (Genres + Rating Bias):")
     display_content_recs(content_model_r, user_id, items_clean, TOP_N_RECS)
-    pause(2)
+    pause(1)
 
-    print(f"\n{'='*55}")
-    print("  Thanks for using the recommender! 🎬")
-    print(f"{'='*55}\n")
+    print(" ")
+    print("  Done.")
+    #print(f"{'='*55}\n")
 
 
 if __name__ == "__main__":
     main()
+
