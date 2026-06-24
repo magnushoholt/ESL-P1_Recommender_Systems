@@ -121,7 +121,7 @@ def pick_user_id(ratings_df):
     valid_ids = sorted(ratings_df["user_id"].unique())
     print(f"👤 There are {len(valid_ids)} users in the dataset (IDs: {min(valid_ids)}–{max(valid_ids)}).")
     pause()
-    print("   Picking a user gives the collaborative model real data to work with.\n")
+    print("   Picking a user gives the models real data to work with.\n")
     pause(2)
 
     while True:
